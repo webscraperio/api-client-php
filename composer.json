@@ -1,0 +1,24 @@
+{
+    "name": "webscraperio/api-client-php",
+    "description": "API client for webscraper.io",
+    "type": "library",
+    "keywords": ["web scraper", "webscraperio"],
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "WebScraper\\ApiClient\\": "src/ApiClient"
+        }
+    },
+    "require": {
+        "php": ">=5.5",
+        "guzzlehttp/guzzle": "~6.0"
+    },
+    "autoload-dev": {
+        "classmap": [
+            "tests/TestCase.php"
+        ]
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0"
+    }
+}
