@@ -104,12 +104,10 @@ Output:
     [
         'id' => 123,
         'name' => 'webscraper-io-landing',
-        'sitemap' => '...',
     ],
     [
         'id' => 124,
         'name' => 'webscraper-io-landing2',
-        'sitemap' => '...',
     ],
 ]
 ```
@@ -211,11 +209,8 @@ $client->downloadScrapingJobCSV($scrapingJob['id'], $outputFile);
 // import into database
 use League\Csv\Reader;
 
-$csv = Reader::createFromPath($outputFile)
-	->setHeaderOffset(0);
-
-$header = $csv->getHeader(); //returns the CSV header record
-$records = $csv->getRecords(); //returns all the CSV records as an Iterator object
+// read data from csv file
+$records = Reader::createFromPath($outputFile)->fetchAssoc();
 
 // Note. 
 // A good practice would be to do a batch insert when inserting data into database
@@ -229,23 +224,6 @@ unlink($outputFile);
 // delete scraping job because you probably don't need it
 $client->deleteScrapingJob(500);
 ```
-
-Output:
-```php
-[
-    [
-        'id' => 500,
-        'sitemap_name' => 'webscraper-io-landing',
-        ...
-    ],
-    [
-        'id' => 501,
-        'sitemap_name' => 'webscraper-io-landing',
-        ...
-    ],
-]
-```
-
 
 **Delete Scraping Job**
 
