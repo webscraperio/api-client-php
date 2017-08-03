@@ -88,7 +88,7 @@ class HttpClient {
 		}
 		catch(RequestException $e) {
 			$statusCode = $e->getCode();
-			throw new WebScraperApiException("Unexpected status code {$statusCode}", $statusCode);
+			throw new WebScraperApiException("Unexpected status code {$statusCode}. Message: ".$e->getMessage(), $statusCode);
 		}
 
 		$statusCode = $response->getStatusCode();
