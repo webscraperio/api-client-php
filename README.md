@@ -236,3 +236,19 @@ Output:
 "ok"
 ```
 
+**Get Account information**
+
+```php
+$client->getAccountInfo();
+```
+
+Output:
+```php
+[
+	'email' => 'user@example.com',
+	'firstname' => 'John',
+	'lastname' => 'Deere',
+	'page_credits' => 500,
+]
+```
+

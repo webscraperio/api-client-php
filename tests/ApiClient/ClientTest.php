@@ -202,4 +202,12 @@ class ClientTestCase extends TestCase {
 		$client->downloadScrapingJobCSV($scrapingJob['id'], $outputFile);
 		$this->assertFileExists($outputFile);
 	}
+
+	public function testGetAccountInformation() {
+
+		$client = $this->client;
+		$accountInfo = $client->getAccountInfo();
+
+		$this->assertGreaterThan(0, $accountInfo['page_credits']);
+	}
 }

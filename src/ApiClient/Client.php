@@ -127,4 +127,16 @@ class Client {
 			'save_to' => $outputFile,
 		]);
 	}
+
+	/**
+	 * Get Account information. Main purpose of this is to retrieve page
+	 * credit amount
+	 *
+	 * @return mixed
+	 */
+	public function getAccountInfo() {
+
+		$response = $this->httpClient->get('account');
+		return $response;
+	}
 }
