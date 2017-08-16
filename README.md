@@ -98,7 +98,7 @@ Output:
 $sitemap = $client->getSitemaps();
 ```
 
-Output:
+Output (Iterator):
 ```php
 [
     [
@@ -176,7 +176,7 @@ Output:
 $client->getScrapingJobs();
 ```
 
-Output:
+Output (Iterator):
 ```php
 [
     [

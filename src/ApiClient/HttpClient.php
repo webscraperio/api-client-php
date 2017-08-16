@@ -31,9 +31,6 @@ class HttpClient {
 				'Accept' => 'application/json, text/javascript, */*',
 				'User-Agent' => 'WebScraper.io PHP SDK v1.0',
 			],
-			'query' => [
-				'api_token' => $this->token,
-			],
 		]);
 	}
 
@@ -55,21 +52,25 @@ class HttpClient {
 			throw new WebScraperApiException("Unsuccessful api response. $body");
 		}
 
-		return $bodyData['data'];
+		return $bodyData;
 	}
 
 	public function get($uri = null, array $options = []) {
 
-		return $this->request("GET", $uri, $options);
+		$response = $this->request("GET", $uri, $options);
+		return $response['data'];
 	}
 
 	public function post($uri = null, array $options = []) {
 
-		return $this->request("POST", $uri, $options);
+		$response =  $this->request("POST", $uri, $options);
+		return $response['data'];
 	}
 
 	public function delete($uri, $options = []) {
-		return $this->request("DELETE", $uri, $options);
+
+		$response =  $this->request("DELETE", $uri, $options);
+		return $response['data'];
 	}
 
 	/**
@@ -82,6 +83,11 @@ class HttpClient {
 	 * @throws WebScraperApiException
 	 */
 	public function requestRaw($method, $uri = null, array $options = []) {
+
+		if(!isset($options['query'])) {
+			$options['query'] = [];
+		}
+		$options['query']['api_token'] = $this->token;
 
 		try {
 			$response = $this->guzzle->request($method, $uri, $options);

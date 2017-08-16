@@ -88,7 +88,7 @@ class ClientTestCase extends TestCase {
 		// first create sitemap
 		$this->createSitemap();
 
-		$sitemaps = $client->getSitemaps();
+		$sitemaps = iterator_to_array($client->getSitemaps());
 		$this->assertGreaterThan(0, count($sitemaps));
 	}
 
@@ -164,7 +164,7 @@ class ClientTestCase extends TestCase {
 		// first create sitemap
 		$this->createScrapingjob();
 
-		$scrapingJobs = $client->getScrapingJobs();
+		$scrapingJobs = iterator_to_array($client->getScrapingJobs());
 		$this->assertGreaterThan(0, count($scrapingJobs));
 	}
 

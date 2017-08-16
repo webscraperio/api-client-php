@@ -48,8 +48,8 @@ class Client {
 	 */
 	public function getSitemaps() {
 
-		$response = $this->httpClient->get('sitemaps');
-		return $response;
+		$iterator = new PaginationIterator($this->httpClient, 'sitemaps');
+		return $iterator;
 	}
 
 	/**
@@ -85,8 +85,8 @@ class Client {
 	 */
 	public function getScrapingJobs() {
 
-		$response = $this->httpClient->get('scraping-jobs');
-		return $response;
+		$iterator = new PaginationIterator($this->httpClient, 'scraping-jobs');
+		return $iterator;
 	}
 
 	/**
