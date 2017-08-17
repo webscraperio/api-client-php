@@ -92,6 +92,27 @@ class ClientTestCase extends TestCase {
 		$this->assertGreaterThan(0, count($sitemaps));
 	}
 
+	public function testGetSitemapsManualPagination() {
+
+		$client = $this->client;
+
+		// first create sitemap
+		$this->createSitemap();
+
+		$totalRecordsFound = 0;
+		$iterator = $client->getSitemaps();
+		$page = 1;
+		do {
+			$records = $iterator->getPageData($page);
+			$totalRecordsFound += count($records);
+			$page++;
+		} while($page <= $iterator->getLastPage());
+
+		$recordCountFromIterator = count(iterator_to_array($client->getSitemaps()));
+
+		$this->assertEquals($recordCountFromIterator, $totalRecordsFound);
+	}
+
 	public function testDeleteSitemap() {
 
 		$client = $this->client;
@@ -166,6 +187,27 @@ class ClientTestCase extends TestCase {
 
 		$scrapingJobs = iterator_to_array($client->getScrapingJobs());
 		$this->assertGreaterThan(0, count($scrapingJobs));
+	}
+
+	public function testGetScrapingJobsManualPagination() {
+
+		$client = $this->client;
+
+		// first create sitemap
+		$this->createScrapingjob();
+
+		$totalRecordsFound = 0;
+		$iterator = $client->getScrapingJobs();
+		$page = 1;
+		do {
+			$scrapingJobs = $iterator->getPageData($page);
+			$totalRecordsFound += count($scrapingJobs);
+			$page++;
+		} while($page <= $iterator->getLastPage());
+
+		$recordCountFromIterator = count(iterator_to_array($client->getScrapingJobs()));
+
+		$this->assertEquals($recordCountFromIterator, $totalRecordsFound);
 	}
 
 	public function testGetScrapingJobsBySitemap() {

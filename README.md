@@ -95,7 +95,7 @@ Output:
 **Get Sitemaps**
 
 ```php
-$sitemap = $client->getSitemaps();
+$sitemaps = $client->getSitemaps();
 ```
 
 Output (Iterator):
@@ -111,6 +111,26 @@ Output (Iterator):
     ],
 ]
 ```
+
+```php
+// iterate through all sitemaps
+$sitemaps = $client->getSitemaps();
+foreach($sitemaps as $sitemap) {
+    var_dump($sitemap);
+}
+
+// iterate throuh all sitemaps while manually handling pagination
+$iterator = $client->getSitemaps();
+$page = 1;
+do {
+    $sitemaps = $iterator->getPageData($page);
+    foreach($sitemaps as $sitemap) {
+        var_dump($sitemap);
+    }
+    $page++;
+} while($page <= $iterator->getLastPage());
+```
+
 
 **Delete Sitemap**
 
@@ -190,6 +210,25 @@ Output (Iterator):
         ...
     ],
 ]
+```
+
+```php
+// iterate through all scraping jobs
+$scrapingJobs = $client->getScrapingJobs();
+foreach($scrapingJobs as $scrapingJob) {
+    var_dump($scrapingJob);
+}
+
+// iterate through all scraping jobs while manually handling pagination
+$iterator = $client->getScrapingJobs();
+$page = 1;
+do {
+    $scrapingJobs = $iterator->getPageData($page);
+    foreach($scrapingJobs as $scrapingJob) {
+        var_dump($scrapingJob);
+    }
+    $page++;
+} while($page <= $iterator->getLastPage());
 ```
 
 **Download Scraping Job CSV**

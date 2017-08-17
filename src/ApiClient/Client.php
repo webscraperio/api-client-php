@@ -44,7 +44,7 @@ class Client {
 	/**
 	 * Get sitemaps
 	 *
-	 * @return mixed
+	 * @return PaginationIterator
 	 */
 	public function getSitemaps() {
 
@@ -82,7 +82,7 @@ class Client {
 	 * get scraping jobs
 	 *
 	 * @param null $sitemapId
-	 * @return PaginationIterator []
+	 * @return PaginationIterator
 	 */
 	public function getScrapingJobs($sitemapId = null) {
 

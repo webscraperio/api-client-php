@@ -63,13 +63,38 @@ class PaginationIterator implements \Iterator {
 		$this->uriPath = $uriPath;
 		$this->httpClientOptions = $httpClientOptions;
 		$this->position = 0;
-		$this->page = 1;
+		$this->page = null;
 	}
 
 	public function rewind() {
 
 		$this->position = 0;
-		$this->getDataFromApi();
+		$this->getPageData(1);
+	}
+
+	/**
+	 * Load data from api
+	 * @return array
+	 */
+	public function getPageData($page) {
+
+		// do not load the same page twice
+		if($this->page === $page) {
+			return $this->array;
+		}
+
+		$this->page = $page;
+
+		$options = $this->httpClientOptions;
+		$options['query']['page'] = $page;
+
+		$response = $this->httpClient->request("GET", $this->uriPath, $options);
+		$this->lastPage = $response['last_page'];
+		$this->total = $response['total'];
+		$this->perPage = $response['per_page'];
+		$this->array = $response['data'];
+
+		return $this->array;
 	}
 
 	public function current() {
@@ -79,7 +104,7 @@ class PaginationIterator implements \Iterator {
 
 	public function key() {
 
-		return $this->position + ($this->perPage * ($this->page-1));
+		return $this->position + ($this->perPage * ($this->page - 1));
 	}
 
 	public function next() {
@@ -87,14 +112,12 @@ class PaginationIterator implements \Iterator {
 		++$this->position;
 
 		// load more data from server when there isn't anything locally
-		if(!isset($this->array[$this->position])) {
-			if($this->page < $this->lastPage) {
-				$this->page++;
+		if (!isset($this->array[$this->position])) {
+			if ($this->page < $this->lastPage) {
 				$this->position = 0;
-				$this->getDataFromApi();
+				$this->getPageData($this->page + 1);
 			}
 		}
-
 	}
 
 	public function valid() {
@@ -102,18 +125,8 @@ class PaginationIterator implements \Iterator {
 		return isset($this->array[$this->position]);
 	}
 
-	/**
-	 * Load data from api
-	 */
-	private function getDataFromApi() {
+	public function getLastPage() {
 
-		$options = $this->httpClientOptions;
-		$options['query']['page'] = $this->page;
-
-		$response = $this->httpClient->request("GET", $this->uriPath, $options);
-		$this->lastPage = $response['last_page'];
-		$this->total = $response['total'];
-		$this->perPage = $response['per_page'];
-		$this->array = $response['data'];
+		return $this->lastPage;
 	}
 }
