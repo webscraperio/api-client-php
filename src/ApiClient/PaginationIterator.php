@@ -51,10 +51,17 @@ class PaginationIterator implements \Iterator {
 	 */
 	private $array;
 
-	public function __construct(HttpClient $httpClient, $uriPath) {
+	/**
+	 * Guzzle http options
+	 * @var array
+	 */
+	private $httpClientOptions;
+
+	public function __construct(HttpClient $httpClient, $uriPath, $httpClientOptions = []) {
 
 		$this->httpClient = $httpClient;
 		$this->uriPath = $uriPath;
+		$this->httpClientOptions = $httpClientOptions;
 		$this->position = 0;
 		$this->page = 1;
 	}
@@ -100,11 +107,9 @@ class PaginationIterator implements \Iterator {
 	 */
 	private function getDataFromApi() {
 
-		$options = [
-			'query' => [
-				'page' => $this->page,
-			],
-		];
+		$options = $this->httpClientOptions;
+		$options['query']['page'] = $this->page;
+
 		$response = $this->httpClient->request("GET", $this->uriPath, $options);
 		$this->lastPage = $response['last_page'];
 		$this->total = $response['total'];

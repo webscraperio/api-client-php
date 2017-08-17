@@ -81,11 +81,17 @@ class Client {
 	/**
 	 * get scraping jobs
 	 *
-	 * @return []
+	 * @param null $sitemapId
+	 * @return PaginationIterator []
 	 */
-	public function getScrapingJobs() {
+	public function getScrapingJobs($sitemapId = null) {
 
-		$iterator = new PaginationIterator($this->httpClient, 'scraping-jobs');
+		$options = [];
+		if($sitemapId) {
+			$options['query']['sitemap_id'] = $sitemapId;
+		}
+
+		$iterator = new PaginationIterator($this->httpClient, 'scraping-jobs', $options);
 		return $iterator;
 	}
 

@@ -173,7 +173,7 @@ Output:
 **Get Scraping Jobs**
 
 ```php
-$client->getScrapingJobs();
+$client->getScrapingJobs($sitemapId = null);
 ```
 
 Output (Iterator):

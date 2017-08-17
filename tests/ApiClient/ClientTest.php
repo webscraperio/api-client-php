@@ -168,6 +168,20 @@ class ClientTestCase extends TestCase {
 		$this->assertGreaterThan(0, count($scrapingJobs));
 	}
 
+	public function testGetScrapingJobsBySitemap() {
+
+		$client = $this->client;
+
+		$scrapingJob = $this->createScrapingjob();
+
+		// create additional scraping job
+		$this->sitemap['_id'] = $this->sitemap['_id'].'extra';
+		$this->createScrapingjob();
+
+		$scrapingJobs = iterator_to_array($client->getScrapingJobs($scrapingJob['sitemap_id']));
+		$this->assertEquals(1, count($scrapingJobs));
+	}
+
 	public function testDeleteScrapingJob() {
 
 		$client = $this->client;
