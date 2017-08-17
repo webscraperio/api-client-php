@@ -291,3 +291,9 @@ Output:
 ]
 ```
 
+## Changelog
+
+### v0.2.0
+
+ * getScrapingJobs() and getSitemaps() now return iterators
+ * getScrapingJobs($sitemapId) can filter by sitemap
