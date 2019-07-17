@@ -129,7 +129,7 @@ class Client {
 
 		$this->httpClient->requestRaw('GET', "scraping-job/{$scrapingJobId}/csv", [
 			'headers'        => ['Accept-Encoding' => 'gzip'],
-			'timeout' => 60.0,
+			'timeout' => 600.0,
 			'save_to' => $outputFile,
 		]);
 	}
@@ -144,7 +144,7 @@ class Client {
 
 		$this->httpClient->requestRaw('GET', "scraping-job/{$scrapingJobId}/json", [
 			'headers'        => ['Accept-Encoding' => 'gzip'],
-			'timeout' => 60.0,
+			'timeout' => 600.0,
 			'save_to' => $outputFile,
 		]);
 	}
