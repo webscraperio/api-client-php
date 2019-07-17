@@ -231,37 +231,41 @@ do {
 } while($page <= $iterator->getLastPage());
 ```
 
-**Download Scraping Job CSV**
+**Download Scraping Job JSON**
 
 Note! A good practice would be to move the download/import task to a queue job.
-Here is a good example of a queue system - https://laravel.com/docs/5.4/queues
-
-The example uses League/CSV package. Install it with composer:
-```bash
-composer require league/csv
-```
+Here is a good example of a queue system - https://laravel.com/docs/5.8/queues
 
 ```php
-$outputFile = "/tmp/scrapingjob500.csv";
-$client->downloadScrapingJobCSV($scrapingJob['id'], $outputFile);
+require "../vendor/autoload.php";
 
-// import into database
-use League\Csv\Reader;
+use WebScraper\ApiClient\Client;
+use WebScraper\ApiClient\Reader\JsonReader;
 
-// read data from csv file
-$records = Reader::createFromPath($outputFile)->fetchAssoc();
+$apiToken = "API token here";
+$scrapingJobId = 500; // scraping job id here
 
-// Note. 
-// A good practice would be to do a batch insert when inserting data into database
-foreach($records as $record) {
-    // ...
+// initialize API client
+$client = new Client([
+	'token' => $apiToken,
+]);
+
+// download file locally
+$outputFile = "/tmp/scrapingjob{$scrapingJobId}.json";
+$client->downloadScrapingJobJSON($scrapingJobId, $outputFile);
+
+// read data from file with built in JSON reader
+$reader = new JsonReader($outputFile);
+$rows = $reader->fetchRows();
+foreach($rows as $row) {
+	echo "ROW: ".json_encode($row)."\n";
 }
 
 // remove temporary file
 unlink($outputFile);
 
 // delete scraping job because you probably don't need it
-$client->deleteScrapingJob(500);
+$client->deleteScrapingJob($scrapingJobId);
 ```
 
 **Delete Scraping Job**
