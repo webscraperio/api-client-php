@@ -259,6 +259,19 @@ class ClientTestCase extends TestCase {
 		$this->assertFileExists($outputFile);
 	}
 
+	public function testDownloadScrapingJobJSON() {
+
+		$client = $this->client;
+
+		// first create scraping job
+		$scrapingJob = $this->createScrapingjob();
+
+		$outputFile = tempnam('/tmp', "webscraper_io_client_test_");
+		unlink($outputFile);
+		$client->downloadScrapingJobJSON($scrapingJob['id'], $outputFile);
+		$this->assertFileExists($outputFile);
+	}
+
 	public function testGetAccountInformation() {
 
 		$client = $this->client;

@@ -135,6 +135,21 @@ class Client {
 	}
 
 	/**
+	 * Download scraping jobs data in a file
+	 *
+	 * @param $scrapingJobId
+	 * @param $outputFile
+	 */
+	public function downloadScrapingJobJSON($scrapingJobId, $outputFile) {
+
+		$this->httpClient->requestRaw('GET', "scraping-job/{$scrapingJobId}/json", [
+			'headers'        => ['Accept-Encoding' => 'gzip'],
+			'timeout' => 60.0,
+			'save_to' => $outputFile,
+		]);
+	}
+
+	/**
 	 * Get Account information. Main purpose of this is to retrieve page
 	 * credit amount
 	 *
