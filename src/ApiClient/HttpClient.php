@@ -75,6 +75,12 @@ class HttpClient {
 		return $response['data'];
 	}
 
+	public function put($uri = null, array $options = []) {
+
+		$response =  $this->request("PUT", $uri, $options);
+		return $response['data'];
+	}
+
 	public function delete($uri, $options = []) {
 
 		$response =  $this->request("DELETE", $uri, $options);

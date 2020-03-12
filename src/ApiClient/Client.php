@@ -52,6 +52,14 @@ class Client {
 		return $iterator;
 	}
 
+	public function updateSitemap($sitemapId, array $sitemap) {
+
+		$response = $this->httpClient->put("sitemap/{$sitemapId}", [
+			'json' => $sitemap,
+		]);
+		return $response;
+	}
+
 	/**
 	 * Delete sitemap
 	 *
