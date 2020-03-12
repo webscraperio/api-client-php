@@ -66,6 +66,30 @@ class ClientTestCase extends TestCase {
 		$this->assertTrue(isset($response['id']));
 	}
 
+	public function testUpdateSitemap() {
+
+		$client = $this->client;
+
+		$sitemap = $this->sitemap;
+		$createResponse = $client->createSitemap($sitemap);
+		$sitemapId = $createResponse['id'];
+
+		// change sitemap attribute
+		$updatedSitemap = $sitemap;
+		$updatedSitemap['_id'] = 'changed-id-for-update';
+
+		$updateResponse = $client->updateSitemap($sitemapId, $updatedSitemap);
+		$this->assertEquals("ok", $updateResponse);
+
+		$remoteSitemap = $client->getSitemap($sitemapId);
+
+		$this->assertEquals([
+			'id' => $sitemapId,
+			'name' => $sitemap['_id'],
+			'sitemap' => json_encode($updatedSitemap, JSON_UNESCAPED_SLASHES),
+		], $remoteSitemap);
+	}
+
 	public function testGetSitemap() {
 
 		$client = $this->client;
