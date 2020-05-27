@@ -27,6 +27,18 @@ $client = new Client([
 ]);
 ```
 
+**Handle API request limit**
+
+(Default) If API request limit is reached and 429 response code is returned then client will be automatically put to sleep and will make request again when API request limits are restored.
+
+This Behavior can be disabled and throw exception instead of sleep.
+```php
+$client = new Client([
+    'token' => 'paste api token here',
+    'use_backoff_sleep' => false,
+]);
+```
+
 **Create Sitemap**
 ```php
 $sitemapJSON = '
