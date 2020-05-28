@@ -17,6 +17,12 @@ class ClientTestCase extends TestCase {
 
 	public function setUp() {
 
+		$apiToken = getenv('WEBSCRAPER_API_TOKEN');
+
+		if ($apiToken === false) {
+			$this->markTestSkipped('Skip test');
+		}
+
 		// sitemap for testing
 		$dir = realpath(dirname(__FILE__));
 		$sitemapStr = file_get_contents($dir.'../../test-sitemap.json');
@@ -25,7 +31,7 @@ class ClientTestCase extends TestCase {
 		$this->sitemap = $sitemap;
 
 		$this->client = new Client([
-			'token' => getenv('WEBSCRAPER_API_TOKEN'),
+			'token' => $apiToken,
 			'base_uri' => getenv('WEBSCRAPER_API_BASE_URI'),
 		]);
 	}
