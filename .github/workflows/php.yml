@@ -1,27 +1,56 @@
-name: PHP Composer
+name: PHP Unit Tests
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: [push]
 
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.operating-system }}
+
+    env:
+      CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+
+    strategy:
+      matrix:
+        operating-system: [ubuntu-latest]
+        php-versions: ['5.6', '7.0', '7.1', '7.2', '7.3', '7.4']
+    name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
 
     steps:
-    - uses: actions/checkout@v2
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Cache vendor
+      id: vendor
+      uses: actions/cache@v2
+      with:
+        path: vendor
+        key: vendor
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-versions }}
+        extensions: mbstring, intl
+        ini-values: post_max_size=256M, short_open_tag=On
+        coverage: xdebug
+        tools: php-cs-fixer, phpunit
 
     - name: Validate composer.json and composer.lock
       run: composer validate
 
+    - name: Install code climate test reporter
+      run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter && chmod +x ./cc-test-reporter
+
+    - name: send to code climate that build is runnning
+      run: ./cc-test-reporter before-build
+
     - name: Install dependencies
-      run: composer install --prefer-dist --no-progress --no-suggest
+      run: composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
 
-    # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
-    # Docs: https://getcomposer.org/doc/articles/scripts.md
+    - name: Make autoload.php
+      run: composer dump-autoload
 
-    # - name: Run test suite
-    #   run: composer run-script test
+    - name: Execute tests
+      run: php -dxdebug.coverage_enable=1 vendor/bin/phpunit --configuration phpunit.xml --coverage-clover clover.xml; PHPUNIT_EXIT_CODE=$?; ./cc-test-reporter after-build -t clover --exit-code $PHPUNIT_EXIT_CODE; exit $PHPUNIT_EXIT_CODE
