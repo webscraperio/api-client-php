@@ -34,8 +34,8 @@ jobs:
         php-version: ${{ matrix.php-versions }}
         extensions: mbstring, intl
         ini-values: post_max_size=256M, short_open_tag=On
-        coverage: xdebug
-        tools: php-cs-fixer, phpunit
+        coverage: pcov
+        tools: php-cs-fixer, phpunit:5.7.27
 
     - name: Validate composer.json and composer.lock
       run: composer validate
@@ -52,5 +52,8 @@ jobs:
     - name: Make autoload.php
       run: composer dump-autoload
 
+    - name: Run pcov clobber used for phpunit < 8
+      run: vendor/bin/pcov clobber
+
     - name: Execute tests
-      run: php -dxdebug.coverage_enable=1 vendor/bin/phpunit --configuration phpunit.xml --coverage-clover clover.xml; PHPUNIT_EXIT_CODE=$?; ./cc-test-reporter after-build -t clover --exit-code $PHPUNIT_EXIT_CODE; exit $PHPUNIT_EXIT_CODE
+      run: php vendor/bin/phpunit --configuration phpunit.xml --coverage-clover clover.xml; PHPUNIT_EXIT_CODE=$?; ./cc-test-reporter after-build -t clover --exit-code $PHPUNIT_EXIT_CODE; exit $PHPUNIT_EXIT_CODE
