@@ -23,6 +23,15 @@ Web Scraper Cloud API documentation can be found on [webscraper.io]
 
 ## Changelog
 
+### v0.3.0
+ 
+ * added updateSitemap($sitemapId) method
+ * added backoff mechanism
+ * createScrapingJob($scrapingJobConfig) now has `start_urls` and `custom_id` 
+ optional fields
+ * `custom_id` field is now returned in getScrapingJob($scrapingJobId),  
+ getScrapingJobs() and createScrapingJob($scrapingJobConfig) responses.
+
 ### v0.2.0
 
  * getScrapingJobs() and getSitemaps() now return iterators
