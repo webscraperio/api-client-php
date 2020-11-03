@@ -1,0 +1,18 @@
+{
+    "_id":"webscraper-io-test-empty",
+    "startUrl":[
+        "https://webscraper.io/test-sites/e-commerce/static/computers/laptops",
+        "https://webscraper.io/test-sites/e-commerce/static/computers/tablets"
+    ],
+    "selectors":[
+        {
+            "id":"selector-test",
+            "type":"SelectorText",
+            "parentSelectors":["_root"],
+            "selector":"body:contains(\"Computers / Tablets\") .page-header",
+            "multiple":true,
+            "regex":"",
+            "delay":0
+        }
+    ]
+}

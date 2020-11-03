@@ -23,12 +23,7 @@ class ClientTestCase extends TestCase {
 			$this->markTestSkipped('Skip test');
 		}
 
-		// sitemap for testing
-		$dir = realpath(dirname(__FILE__));
-		$sitemapStr = file_get_contents($dir.'../../test-sitemap.json');
-		$sitemap = json_decode($sitemapStr, true);
-		$sitemap['_id'] = str_replace('.', '_', uniqid("test_", true));
-		$this->sitemap = $sitemap;
+		$this->setSitemap('test-sitemap.json');
 
 		$this->client = new Client([
 			'token' => $apiToken,
@@ -82,7 +77,7 @@ class ClientTestCase extends TestCase {
 
 		// change sitemap attribute
 		$updatedSitemap = $sitemap;
-		$updatedSitemap['_id'] = 'changed-id-for-update';
+		$updatedSitemap['startUrl'] = ['https://changed-id-for-update.com'];
 
 		$updateResponse = $client->updateSitemap($sitemapId, $updatedSitemap);
 		$this->assertEquals("ok", $updateResponse);
@@ -205,6 +200,7 @@ class ClientTestCase extends TestCase {
 			'page_load_delay' => 2000,
 			'driver' => 'fast',
 			'scheduled' => 0,
+			'custom_id' => null,
 		], $scrapingJob);
 	}
 
@@ -308,5 +304,39 @@ class ClientTestCase extends TestCase {
 		$accountInfo = $client->getAccountInfo();
 
 		$this->assertGreaterThan(0, $accountInfo['page_credits']);
+	}
+
+	public function testGetProblematicUrls() {
+
+		$this->setSitemap('test-sitemap-with-empty.json');
+
+		$client = $this->client;
+		$scrapingJobId = $this->createScrapingjob()['id'];
+
+		do {
+			sleep(60);
+			$runningScrapingJob  = $client->getScrapingJob($scrapingJobId);
+		} while(!in_array($runningScrapingJob['status'], ['finished', 'shelved']));
+
+		$problematicUrlsIterator = $client->getProblematicUrls($scrapingJobId);
+
+		$expectedData = [
+			['type' => 'empty', 'url' => 'https://webscraper.io/test-sites/e-commerce/static/computers/laptops'],
+		];
+
+		$this->assertEquals($expectedData, iterator_to_array($problematicUrlsIterator));
+
+		$this->assertEquals($expectedData, $problematicUrlsIterator->getPageData(1));
+
+		$this->assertEquals([], $problematicUrlsIterator->getPageData(2));
+	}
+
+	private function setSitemap($jsonFile) {
+
+		$dir = realpath(dirname(__FILE__));
+		$sitemapStr = file_get_contents($dir . '../../' . $jsonFile);
+		$sitemap = json_decode($sitemapStr, true);
+		$sitemap['_id'] = str_replace('.', '_', uniqid("test_", true));
+		$this->sitemap = $sitemap;
 	}
 }
