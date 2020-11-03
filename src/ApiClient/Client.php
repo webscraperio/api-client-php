@@ -168,4 +168,15 @@ class Client {
 		$response = $this->httpClient->get('account');
 		return $response;
 	}
+
+	/**
+	 * Get problematic urls
+	 *
+	 * @return PaginationIterator
+	 */
+	public function getProblematicUrls($scrapingJobId) {
+
+		$iterator = new PaginationIterator($this->httpClient, "scraping-job/{$scrapingJobId}/problematic-urls");
+		return $iterator;
+	}
 }
