@@ -1,8 +1,7 @@
 <?php
 
 
-namespace Tests\WebScraper\Api\Reader;
-
+namespace Tests\ApiClient\Reader;
 
 use Tests\TestCase;
 use WebScraper\ApiClient\Reader\JsonReader;

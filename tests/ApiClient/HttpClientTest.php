@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\WebScraper\Api;
+namespace Tests\ApiClient;
 
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Handler\MockHandler;
