@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\WebScraper\Api;
+namespace Tests\ApiClient;
 
 use Tests\TestCase;
 use WebScraper\ApiClient\Client;
 use WebScraper\ApiClient\WebScraperApiException;
 
-class ClientTestCase extends TestCase {
+class ClientTest extends TestCase {
 
 	/**
 	 * @var Client
@@ -15,7 +15,7 @@ class ClientTestCase extends TestCase {
 
 	private $sitemap;
 
-	public function setUp() {
+	public function setUp(): void {
 
 		$apiToken = getenv('WEBSCRAPER_API_TOKEN');
 
@@ -201,6 +201,7 @@ class ClientTestCase extends TestCase {
 			'driver' => 'fast',
 			'scheduled' => 0,
 			'custom_id' => null,
+			'scraping_duration' => 0,
 		], $scrapingJob);
 	}
 

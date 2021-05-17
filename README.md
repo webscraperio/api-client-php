@@ -23,6 +23,10 @@ Web Scraper Cloud API documentation can be found on [webscraper.io]
 
 ## Changelog
 
+### v1.1.0
+
+* Drop support for "End of life" PHP versions 5.6, 7.0, 7.2. Minimum required version is PHP 7.3
+
 ### v0.3.0
  
  * added updateSitemap($sitemapId) method
