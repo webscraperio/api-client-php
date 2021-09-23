@@ -190,4 +190,28 @@ class Client {
 		$response = $this->httpClient->get("scraping-job/{$scrapingJobId}/data-quality");
 		return $response;
 	}
+
+	/**
+	 * Enable sitemap scheduler
+	 *
+	 * @return mixed
+	 */
+	public function enableSitemapScheduler(int $sitemapId, array $schedulerConfig) {
+
+		$response = $this->httpClient->post("sitemap/{$sitemapId}/enable-scheduler", [
+			'json' => $schedulerConfig,
+		]);
+		return $response;
+	}
+
+	/**
+	 * Disable sitemap scheduler
+	 *
+	 * @return mixed
+	 */
+	public function disableSitemapScheduler(int $sitemapId) {
+
+		$response = $this->httpClient->post("sitemap/{$sitemapId}/disable-scheduler");
+		return $response;
+	}
 }
