@@ -371,6 +371,33 @@ class ClientTest extends TestCase {
 		], $dataQuality);
 	}
 
+	public function testEnableDisableSitemapScheduler() {
+
+		$client = $this->client;
+		$sitemap = $this->sitemap;
+		$createResponse = $client->createSitemap($sitemap);
+		$sitemapId = $createResponse['id'];
+
+		$enableResponse = $client->enableSitemapScheduler($sitemapId, [
+			"cron_minute" => "*/10",
+			"cron_hour" => "*",
+			"cron_day" => "*",
+			"cron_month" => "*",
+			"cron_weekday" => "*",
+			"request_interval" => 2100,
+			"page_load_delay" => 2200,
+			"cron_timezone" => "Europe/Riga",
+			"driver" => "fast",
+			"proxy" => 1
+		]);
+
+		$this->assertEquals("ok", $enableResponse);
+
+		$disableResponse = $client->disableSitemapScheduler($sitemapId);
+
+		$this->assertEquals("ok", $disableResponse);
+	}
+
 	private function setSitemap($jsonFile) {
 
 		$dir = realpath(dirname(__FILE__));
