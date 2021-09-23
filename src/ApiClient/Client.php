@@ -179,4 +179,15 @@ class Client {
 		$iterator = new PaginationIterator($this->httpClient, "scraping-job/{$scrapingJobId}/problematic-urls");
 		return $iterator;
 	}
+
+	/**
+	 * Get scraping job
+	 *
+	 * @return  mixed
+	 */
+	public function getScrapingJobDataQuality(int $scrapingJobId) {
+
+		$response = $this->httpClient->get("scraping-job/{$scrapingJobId}/data-quality");
+		return $response;
+	}
 }
