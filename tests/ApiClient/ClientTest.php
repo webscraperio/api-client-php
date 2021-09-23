@@ -332,6 +332,45 @@ class ClientTest extends TestCase {
 		$this->assertEquals([], $problematicUrlsIterator->getPageData(2));
 	}
 
+	public function testGetScrapingJobDataQuality() {
+
+		$client = $this->client;
+		$createdScrapingJob = $this->createScrapingjob();
+
+		// Wait till scraping job finishes
+		do {
+			sleep(10);
+			$status = $client->getScrapingJob($createdScrapingJob['id'])['status'];
+		} while($status !== 'finished');
+
+		$dataQuality = $client->getScrapingJobDataQuality($createdScrapingJob['id']);
+		$this->assertEquals([
+			'min_record_count' => [
+				'got' => 1,
+				'expected' => 1,
+				'success' => true,
+			],
+			'max_failed_pages_percent' => [
+				'got' => 0,
+				'expected' => 5,
+				'success' => true,
+			],
+			'max_empty_pages_percent' => [
+				'got' => 0,
+				'expected' => 5,
+				'success' => true,
+			],
+			'min_column_records' => [
+				'title' => [
+					'got' => 100,
+					'expected' => 95,
+					'success' => true,
+				],
+			],
+			'overall_data_quality_success' => true,
+		], $dataQuality);
+	}
+
 	private function setSitemap($jsonFile) {
 
 		$dir = realpath(dirname(__FILE__));
