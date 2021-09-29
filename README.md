@@ -23,6 +23,12 @@ Web Scraper Cloud API documentation can be found on [webscraper.io]
 
 ## Changelog
 
+### v1.2.0
+ 
+ * added enableSitemapScheduler($sitemapId, $schedulerConfig) method
+ * added disableSitemapScheduler($sitemapId) method
+ * added getScrapingJobDataQuality($scrapingJobId) method
+
 ### v1.1.0
 
 * Drop support for "End of life" PHP versions 5.6, 7.0, 7.2. Minimum required version is PHP 7.3

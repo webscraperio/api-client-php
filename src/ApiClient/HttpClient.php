@@ -37,7 +37,7 @@ class HttpClient {
 			'timeout' => 5.0,
 			'headers' => [
 				'Accept' => 'application/json, text/javascript, */*',
-				'User-Agent' => 'WebScraper.io PHP SDK v1.1.0',
+				'User-Agent' => 'WebScraper.io PHP SDK v1.2.0',
 			],
 		]);
 	}
