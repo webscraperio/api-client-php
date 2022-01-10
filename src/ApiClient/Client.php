@@ -214,4 +214,15 @@ class Client {
 		$response = $this->httpClient->post("sitemap/{$sitemapId}/disable-scheduler");
 		return $response;
 	}
+
+	/**
+	 * Get sitemap scheduler
+	 *
+	 * @return mixed
+	 */
+	public function getSitemapScheduler(int $sitemapId) {
+
+		$response = $this->httpClient->get("sitemap/{$sitemapId}/scheduler");
+		return $response;
+	}
 }

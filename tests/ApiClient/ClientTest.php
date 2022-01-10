@@ -377,8 +377,7 @@ class ClientTest extends TestCase {
 		$sitemap = $this->sitemap;
 		$createResponse = $client->createSitemap($sitemap);
 		$sitemapId = $createResponse['id'];
-
-		$enableResponse = $client->enableSitemapScheduler($sitemapId, [
+		$postData = [
 			"cron_minute" => "*/10",
 			"cron_hour" => "*",
 			"cron_day" => "*",
@@ -389,13 +388,17 @@ class ClientTest extends TestCase {
 			"cron_timezone" => "Europe/Riga",
 			"driver" => "fast",
 			"proxy" => 1
-		]);
+		];
+
+		$enableResponse = $client->enableSitemapScheduler($sitemapId, $postData);
 
 		$this->assertEquals("ok", $enableResponse);
+		$this->assertEquals(array_merge(['scheduler_enabled' => true], $postData), $client->getSitemapScheduler($sitemapId));
 
 		$disableResponse = $client->disableSitemapScheduler($sitemapId);
 
 		$this->assertEquals("ok", $disableResponse);
+		$this->assertEquals(array_merge(['scheduler_enabled' => false], $postData), $client->getSitemapScheduler($sitemapId));
 	}
 
 	private function setSitemap($jsonFile) {
