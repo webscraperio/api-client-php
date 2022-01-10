@@ -23,6 +23,10 @@ Web Scraper Cloud API documentation can be found on [webscraper.io]
 
 ## Changelog
 
+### v1.3.0
+
+* added getSitemapScheduler($sitemapId) method
+
 ### v1.2.0
  
  * added enableSitemapScheduler($sitemapId, $schedulerConfig) method
