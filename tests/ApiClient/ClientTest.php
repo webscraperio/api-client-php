@@ -40,7 +40,7 @@ class ClientTest extends TestCase {
 		return $response;
 	}
 
-	public function createScrapingjob() {
+	public function createScrapingJob() {
 
 		$client = $this->client;
 
@@ -176,11 +176,9 @@ class ClientTest extends TestCase {
 	}
 
 	public function testGetScrapingJob() {
-
 		$client = $this->client;
-
 		$initialSitemap = $this->sitemap;
-		$scrapingJobCreated = $this->createScrapingjob();
+		$scrapingJobCreated = $this->createScrapingJob();
 		$scrapingJob = $client->getScrapingJob($scrapingJobCreated['id']);
 
 		unset($scrapingJob['time_created']);
@@ -188,7 +186,7 @@ class ClientTest extends TestCase {
 		$this->assertEquals([
 			'id' => $scrapingJobCreated['id'],
 			'sitemap_name' => $initialSitemap['_id'],
-			'status' => 'scheduling',
+			'status' => 'waiting-to-be-scheduled',
 			'sitemap_id' => $scrapingJobCreated['sitemap_id'],
 			'test_run' => 0,
 			'jobs_scheduled' => 0,
@@ -210,7 +208,7 @@ class ClientTest extends TestCase {
 		$client = $this->client;
 
 		// first create sitemap
-		$this->createScrapingjob();
+		$this->createScrapingJob();
 
 		$scrapingJobs = iterator_to_array($client->getScrapingJobs());
 		$this->assertGreaterThan(0, count($scrapingJobs));
@@ -221,7 +219,7 @@ class ClientTest extends TestCase {
 		$client = $this->client;
 
 		// first create sitemap
-		$this->createScrapingjob();
+		$this->createScrapingJob();
 
 		$totalRecordsFound = 0;
 		$iterator = $client->getScrapingJobs();
@@ -241,11 +239,11 @@ class ClientTest extends TestCase {
 
 		$client = $this->client;
 
-		$scrapingJob = $this->createScrapingjob();
+		$scrapingJob = $this->createScrapingJob();
 
 		// create additional scraping job
 		$this->sitemap['_id'] = $this->sitemap['_id'].'extra';
-		$this->createScrapingjob();
+		$this->createScrapingJob();
 
 		$scrapingJobs = iterator_to_array($client->getScrapingJobs($scrapingJob['sitemap_id']));
 		$this->assertEquals(1, count($scrapingJobs));
@@ -256,7 +254,7 @@ class ClientTest extends TestCase {
 		$client = $this->client;
 
 		// first create scraping job
-		$scrapingJob = $this->createScrapingjob();
+		$scrapingJob = $this->createScrapingJob();
 
 		// delete scraping job
 		$response = $client->deleteScrapingJob($scrapingJob['id']);
@@ -278,7 +276,7 @@ class ClientTest extends TestCase {
 		$client = $this->client;
 
 		// first create scraping job
-		$scrapingJob = $this->createScrapingjob();
+		$scrapingJob = $this->createScrapingJob();
 
 		$outputFile = tempnam('/tmp', "webscraper_io_client_test_");
 		unlink($outputFile);
@@ -291,7 +289,7 @@ class ClientTest extends TestCase {
 		$client = $this->client;
 
 		// first create scraping job
-		$scrapingJob = $this->createScrapingjob();
+		$scrapingJob = $this->createScrapingJob();
 
 		$outputFile = tempnam('/tmp', "webscraper_io_client_test_");
 		unlink($outputFile);
@@ -308,15 +306,14 @@ class ClientTest extends TestCase {
 	}
 
 	public function testGetProblematicUrls() {
-
 		$this->setSitemap('test-sitemap-with-empty.json');
 
 		$client = $this->client;
-		$scrapingJobId = $this->createScrapingjob()['id'];
+		$scrapingJobId = $this->createScrapingJob()['id'];
 
 		do {
 			sleep(60);
-			$runningScrapingJob  = $client->getScrapingJob($scrapingJobId);
+			$runningScrapingJob = $client->getScrapingJob($scrapingJobId);
 		} while(!in_array($runningScrapingJob['status'], ['finished', 'shelved']));
 
 		$problematicUrlsIterator = $client->getProblematicUrls($scrapingJobId);
@@ -335,7 +332,7 @@ class ClientTest extends TestCase {
 	public function testGetScrapingJobDataQuality() {
 
 		$client = $this->client;
-		$createdScrapingJob = $this->createScrapingjob();
+		$createdScrapingJob = $this->createScrapingJob();
 
 		// Wait till scraping job finishes
 		do {
