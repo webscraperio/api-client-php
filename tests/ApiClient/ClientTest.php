@@ -2,6 +2,7 @@
 
 namespace Tests\ApiClient;
 
+use ReflectionObject;
 use Tests\TestCase;
 use WebScraper\ApiClient\Client;
 use WebScraper\ApiClient\WebScraperApiException;
@@ -413,6 +414,26 @@ class ClientTest extends TestCase {
 
 		$this->assertEquals("ok", $disableResponse);
 		$this->assertEquals(array_merge(['scheduler_enabled' => false], $postData), $client->getSitemapScheduler($sitemapId));
+	}
+
+	public function downloadScrapingJobUriProvider() {
+
+		return [
+			[1, 'csv', false, 'scraping-job/1/csv'],
+			[1, 'csv', true, 'scraping-job/1/csv?raw=true'],
+		];
+	}
+
+	/**
+	 * @dataProvider downloadScrapingJobUriProvider
+	 */
+	public function testDownloadScrapingJobUri(int $scrapingJobId, string $format, bool $raw, string $expectedUri) {
+
+		$reflector = new ReflectionObject($this->client);
+		$method = $reflector->getMethod('downloadScrapingJobUri');
+		$method->setAccessible(true);
+
+		$this->assertEquals( $expectedUri, $method->invoke($this->client, $scrapingJobId, $format, $raw));
 	}
 
 	private function setSitemap($jsonFile) {

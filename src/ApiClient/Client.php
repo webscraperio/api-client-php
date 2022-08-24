@@ -2,6 +2,8 @@
 
 namespace WebScraper\ApiClient;
 
+use Psr\Http\Message\ResponseInterface;
+
 class Client {
 
 	/**
@@ -126,38 +128,29 @@ class Client {
 		$response = $this->httpClient->delete("scraping-job/{$scrapingJobId}");
 		return $response;
 	}
+	
+	public function downloadScrapingJobCSV(int $scrapingJobId, string $outputFile, bool $raw = false): ResponseInterface {
 
-	/**
-	 * Download scraping jobs data in a file
-	 *
-	 * @param $scrapingJobId
-	 * @param $outputFile
-	 */
-	public function downloadScrapingJobCSV($scrapingJobId, $outputFile) {
-
-		return $this->httpClient->downloadRequest("scraping-job/{$scrapingJobId}/csv", $outputFile);
+		return $this->httpClient->downloadRequest(
+			$this->downloadScrapingJobUri($scrapingJobId, 'csv', $raw),
+			$outputFile
+		);
 	}
 
-	/**
-	 * Download scraping jobs data in a file
-	 *
-	 * @param $scrapingJobId
-	 * @param $outputFile
-	 */
-	public function downloadScrapingJobJSON($scrapingJobId, $outputFile) {
+	public function downloadScrapingJobJSON(int $scrapingJobId, string $outputFile, bool $raw = false): ResponseInterface {
 
-		return $this->httpClient->downloadRequest("scraping-job/{$scrapingJobId}/json", $outputFile);
+		return $this->httpClient->downloadRequest(
+			$this->downloadScrapingJobUri($scrapingJobId, 'json', $raw),
+			$outputFile
+		);
 	}
 
-	/**
-	 * Download scraping jobs data in a file
-	 *
-	 * @param $scrapingJobId
-	 * @param $outputFile
-	 */
-	public function downloadScrapingJobXLSX($scrapingJobId, $outputFile) {
+	public function downloadScrapingJobXLSX(int $scrapingJobId, string $outputFile,  bool $raw = false): ResponseInterface {
 
-		return $this->httpClient->downloadRequest("scraping-job/{$scrapingJobId}/xlsx", $outputFile);
+		return $this->httpClient->downloadRequest(
+			$this->downloadScrapingJobUri($scrapingJobId, 'xlsx', $raw),
+			$outputFile
+		);
 	}
 
 	/**
@@ -227,5 +220,11 @@ class Client {
 
 		$response = $this->httpClient->get("sitemap/{$sitemapId}/scheduler");
 		return $response;
+	}
+
+	private function downloadScrapingJobUri(int $scrapingJobId, string $format, bool $raw): string {
+
+		$query = $raw ? '?raw=true' : '';
+		return "scraping-job/{$scrapingJobId}/{$format}{$query}";
 	}
 }
