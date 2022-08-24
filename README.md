@@ -23,6 +23,11 @@ Web Scraper Cloud API documentation can be found on [webscraper.io]
 
 ## Changelog
 
+### v1.4.0
+
+* added `downloadScrapingJobXLSX()` method
+* added `bool $raw` parameter to scraping job download functions
+
 ### v1.3.0
 
 * added getSitemapScheduler($sitemapId) method
