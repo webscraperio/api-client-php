@@ -4,6 +4,7 @@ namespace WebScraper\ApiClient;
 
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Client as GuzzleClient;
+use Psr\Http\Message\ResponseInterface;
 
 class HttpClient {
 
@@ -111,6 +112,15 @@ class HttpClient {
 		}
 
 		return $response;
+	}
+
+	public function downloadRequest(string $uri, string $outputFile): ResponseInterface {
+
+		return $this->requestRaw('GET', $uri, [
+			'headers' => ['Accept-Encoding' => 'gzip'],
+			'timeout' => 600.0,
+			'sink' => $outputFile,
+		]);
 	}
 
 	/**

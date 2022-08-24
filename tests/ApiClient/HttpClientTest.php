@@ -6,7 +6,9 @@ use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\Stream;
 use ReflectionObject;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Tests\TestCase;
 use WebScraper\ApiClient\HttpClient;
 use WebScraper\ApiClient\WebScraperApiException;
@@ -151,5 +153,24 @@ class HttpClientTest extends TestCase {
 		$property = $reflector->getProperty($propertyName);
 		$property->setAccessible(true);
 		$property->setValue($object, $value);
+	}
+
+	/**
+	 * @covers ::requestRaw()
+	 * @covers ::downloadRequest()
+	 */
+	public function testDownloadRequest() {
+
+		$responses = [
+			new Response(200, [], 'row')
+		];
+
+		$httpClient = $this->setMockHttpClient($responses);
+		$httpClient->downloadRequest('/download/csv', 'tests/downloaded-file.csv');
+
+		$this->assertFileExists('tests/downloaded-file.csv');
+		$this->assertEquals('row', file_get_contents('tests/downloaded-file.csv'));
+
+		unlink('tests/downloaded-file.csv');
 	}
 }

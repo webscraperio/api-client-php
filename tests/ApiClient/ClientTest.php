@@ -282,6 +282,7 @@ class ClientTest extends TestCase {
 		unlink($outputFile);
 		$client->downloadScrapingJobCSV($scrapingJob['id'], $outputFile);
 		$this->assertFileExists($outputFile);
+		$this->assertEquals('text/plain', mime_content_type($outputFile));
 	}
 
 	public function testDownloadScrapingJobJSON() {
@@ -295,6 +296,22 @@ class ClientTest extends TestCase {
 		unlink($outputFile);
 		$client->downloadScrapingJobJSON($scrapingJob['id'], $outputFile);
 		$this->assertFileExists($outputFile);
+		// Empty because scraping job not finished and data are empty
+		$this->assertEquals('application/x-empty', mime_content_type($outputFile));
+	}
+
+	public function testDownloadScrapingJobXLSX() {
+
+		$client = $this->client;
+
+		// first create scraping job
+		$scrapingJob = $this->createScrapingJob();
+
+		$outputFile = tempnam('/tmp', "webscraper_io_client_test_");
+		unlink($outputFile);
+		$client->downloadScrapingJobXLSX($scrapingJob['id'], $outputFile);
+		$this->assertFileExists($outputFile);
+		$this->assertEquals('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', mime_content_type($outputFile));
 	}
 
 	public function testGetAccountInformation() {
