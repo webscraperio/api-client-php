@@ -135,11 +135,7 @@ class Client {
 	 */
 	public function downloadScrapingJobCSV($scrapingJobId, $outputFile) {
 
-		$this->httpClient->requestRaw('GET', "scraping-job/{$scrapingJobId}/csv", [
-			'headers'        => ['Accept-Encoding' => 'gzip'],
-			'timeout' => 600.0,
-			'sink' => $outputFile,
-		]);
+		return $this->httpClient->downloadRequest("scraping-job/{$scrapingJobId}/csv", $outputFile);
 	}
 
 	/**
@@ -150,11 +146,18 @@ class Client {
 	 */
 	public function downloadScrapingJobJSON($scrapingJobId, $outputFile) {
 
-		$this->httpClient->requestRaw('GET', "scraping-job/{$scrapingJobId}/json", [
-			'headers'        => ['Accept-Encoding' => 'gzip'],
-			'timeout' => 600.0,
-			'sink' => $outputFile,
-		]);
+		return $this->httpClient->downloadRequest("scraping-job/{$scrapingJobId}/json", $outputFile);
+	}
+
+	/**
+	 * Download scraping jobs data in a file
+	 *
+	 * @param $scrapingJobId
+	 * @param $outputFile
+	 */
+	public function downloadScrapingJobXLSX($scrapingJobId, $outputFile) {
+
+		return $this->httpClient->downloadRequest("scraping-job/{$scrapingJobId}/xlsx", $outputFile);
 	}
 
 	/**
