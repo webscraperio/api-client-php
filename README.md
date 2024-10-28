@@ -23,6 +23,11 @@ Web Scraper Cloud API documentation can be found on [webscraper.io]
 
 ## Changelog
 
+### v1.5.0
+
+* Added support for php 8.2, 8.3
+* Dependency bump
+
 ### v1.4.0
 
 * added `downloadScrapingJobXLSX()` method
