@@ -13,7 +13,6 @@ class Client {
 
 	public function __construct($options) {
 
-		$this->token = $options['token'];
 		$this->httpClient = new HttpClient($options);
 	}
 
