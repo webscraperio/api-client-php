@@ -66,6 +66,7 @@ class PaginationIterator implements \Iterator {
 		$this->page = null;
 	}
 
+	#[\ReturnTypeWillChange]
 	public function rewind() {
 
 		$this->position = 0;
@@ -97,16 +98,19 @@ class PaginationIterator implements \Iterator {
 		return $this->array;
 	}
 
+	#[\ReturnTypeWillChange]
 	public function current() {
 
 		return $this->array[$this->position];
 	}
 
+	#[\ReturnTypeWillChange]
 	public function key() {
 
 		return $this->position + ($this->perPage * ($this->page - 1));
 	}
 
+	#[\ReturnTypeWillChange]
 	public function next() {
 
 		++$this->position;
@@ -120,6 +124,7 @@ class PaginationIterator implements \Iterator {
 		}
 	}
 
+	#[\ReturnTypeWillChange]
 	public function valid() {
 
 		return isset($this->array[$this->position]);
