@@ -12,8 +12,7 @@
       "multiple": false,
       "id": "title",
       "selector": "h1",
-      "regex": "",
-      "delay": ""
+      "regex": ""
     }
   ]
 }

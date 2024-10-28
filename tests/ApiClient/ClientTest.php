@@ -194,6 +194,7 @@ class ClientTest extends TestCase {
 			'jobs_executed' => 0,
 			'jobs_failed' => 0,
 			'jobs_empty' => 0,
+			'jobs_no_value' => 0,
 			'stored_record_count' => 0,
 			'request_interval' => 2000,
 			'page_load_delay' => 2000,
@@ -371,6 +372,11 @@ class ClientTest extends TestCase {
 				'success' => true,
 			],
 			'max_empty_pages_percent' => [
+				'got' => 0,
+				'expected' => 5,
+				'success' => true,
+			],
+			'max_no_value_pages_percent' => [
 				'got' => 0,
 				'expected' => 5,
 				'success' => true,
